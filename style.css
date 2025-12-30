@@ -1,0 +1,1324 @@
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+:root {
+    /* Brand Palette */
+    --color-bg: #1a1a1a;
+    /* Deep charcoal / near-black */
+    --color-accent: #cc5500;
+    /* Burnt orange / warm amber */
+    --color-text: #f0f0f0;
+    /* Soft off-white */
+    --color-text-muted: #a0a0a0;
+    --color-border: #333333;
+    --color-surface: #222222;
+
+    /* Typography */
+    --font-heading: 'Playfair Display', serif;
+    --font-body: 'Inter', sans-serif;
+
+    /* Spacing */
+    --spacing-container: 5%;
+    --spacing-section: 120px;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html,
+body {
+    overflow-x: hidden;
+    width: 100%;
+    position: relative;
+}
+
+body {
+    font-family: var(--font-body);
+    color: var(--color-text);
+    background-color: var(--color-bg);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+}
+
+.no-scroll {
+    overflow: hidden !important;
+    height: 100vh !important;
+    /* Force lock */
+}
+
+/* Typography Defaults */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    padding-top: 8vh;
+    font-family: var(--font-heading);
+    font-weight: 700;
+    line-height: 1.2;
+    color: var(--color-text);
+}
+
+h1 {
+    font-size: 3.5rem;
+}
+
+h2 {
+    font-size: 2.5rem;
+}
+
+h3 {
+    font-size: 1.75rem;
+}
+
+p {
+    color: var(--color-text-muted);
+    font-size: 1.1rem;
+    max-width: 65ch;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+/* Utility Classes */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 var(--spacing-container);
+}
+
+.section {
+    padding: var(--spacing-section) 0;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.text-accent {
+    color: var(--color-accent);
+}
+
+/* Buttons */
+.btn {
+    display: inline-block;
+    padding: 11.2px 24px;
+    /* Smaller size */
+    font-family: var(--font-body);
+    font-weight: 600;
+    font-size: 12px;
+    /* Slightly smaller text */
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    border: 1px solid transparent;
+    border-radius: 9999px;
+    /* Full round / Pill shape */
+    transition: all 0.3s ease;
+    cursor: pointer;
+    white-space: nowrap;
+    /* Force one line */
+}
+
+.btn-primary {
+    background-color: var(--color-accent);
+    color: #ffffff !important;
+    /* Force bright white */
+    border-color: var(--color-accent);
+}
+
+.btn-primary:hover {
+    background-color: transparent;
+    color: var(--color-accent);
+}
+
+.btn-secondary {
+    background-color: transparent;
+    color: var(--color-text);
+    border-color: var(--color-text);
+}
+
+.btn-secondary:hover {
+    background-color: var(--color-text);
+    color: var(--color-bg);
+}
+
+.btn-text {
+    padding: 0;
+    border: none;
+    border-bottom: 1px solid var(--color-accent);
+    color: var(--color-text);
+}
+
+.btn-text:hover {
+    color: var(--color-accent);
+}
+
+/* Navigation */
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: 24px 0;
+    background: rgba(26, 26, 26, 0.95);
+    backdrop-filter: blur(10px);
+    z-index: 1000;
+    border-bottom: 1px solid var(--color-border);
+    transition: background 0.3s ease;
+    /* Smooth transition for scroll effect */
+}
+
+.nav-container {
+    display: flex;
+    justify-content: center;
+    /* Center align for desktop */
+    align-items: center;
+    gap: 3rem;
+    /* Keeping gap 3rem (48px) as per code, but user said "Spacing between spacer"? User said "Spacing between navigation items: 40px". "Gap between logo block and first nav: 64px"? Wait. 
+    User said "Spacing from logo block to first navigation item: 64px". Logo margin-right is 4rem (64px).
+    "Spacing between navigation items: 40px". nav-links gap is 2.5rem (40px).
+    nav-container gap is 3rem (48px). This is between Logo and NavLinks? No, Logo has margin-right 4rem. nav-links is a child.
+    Actually, .nav-container has `gap: 3rem`.
+    Let's check structure: logo + mobile-nav-toggle + nav-links.
+    Logo has `margin-right: 4rem` (64px).
+    If nav-container also has gap 3rem, that adds up?
+    Let's check lines 180-187.
+    .nav-container { ... gap: 3rem; }
+    .logo { ... margin-right: 4rem; }
+    If flex gap is 3rem AND margin-right is 4rem, total space is HUGE.
+    Wait, user said "Spacing from logo block to first navigation item: 64px".
+    If I have gap + margin, it's gap + margin.
+    I should probably set `gap: 0` in nav-container or remove margin from logo?
+    User said "Process page header... is the approved measurement standard".
+    In the previous turn (Step 44), CSS provided:
+    .nav-container { gap: 3rem; }
+    .logo { margin-right: 4rem; }
+    This means the space is 3rem + 4rem = 7rem = 112px? Or does margin collapse? In Flexbox, margin does NOT collapse with gap.
+    So current Process header has 112px space?
+    User says "Spacing from logo block to first navigation item: 64px".
+    This implies Process page header *actually* has 64px.
+    So one of these values must be 0 or removed.
+    However, I must reuse "Process page header design... unchanged".
+    Maybe the user's measurement readout is the *result*, and I need to adjust code to match it?
+    "Logo icon height: 40px... Spacing from logo block... 64px".
+    If the current code has gap 3rem AND margin 4rem, that's wrong.
+    But I must not "redesign".
+    Let's look at the "Immutable" CSS provided in Step 44.
+    It had:
+    .nav-container { gap: 3rem; }
+    .logo { margin-right: 4rem; }
+    So the user *approved* that code.
+    But now says "Spacing... 64px".
+    Maybe `nav-links` is `justify-content`?
+    The structure is `logo`, `button`, `nav-links`.
+    On texttop, button is hidden (`display: none` in CSS?).
+    Actually, `mobile-nav-toggle` is `display: none` in base?
+    Let's check `style.css` line 493: `.mobile-nav-toggle { display: none; ... }`
+    So on Desktop: `logo` and `nav-links` are the items.
+    Space = `.nav-container` gap (3rem) + `.logo` margin-right (4rem).
+    Total = 7rem = 112px.
+    User says "Spacing... 64px".
+    This sounds like the code provided in Step 44 might have been "approved" but visually `process.html` might be different, OR the user is correcting the measurement definition now.
+    "Process page desktop header is the approved measurement standard... apply... to Home".
+    "Locked Measurements... Spacing from logo block to first navigation item: 64px".
+    I should change the code to achieve 64px.
+    If I remove gap and keep margin 64px?
+    Or remove margin and keep gap 64px?
+    Or gap 0, margin 64px.
+    Current `style.css` uses `gap: 3rem` (48px) and `margin-right: 4rem` (64px).
+    I will set `gap: 0` and `margin-right: 64px`? Or `gap: 64px`.
+    However, the User *listed* the measurements.
+    "Gap between logo icon and text: 8px" (0.5rem -> 8px).
+    "Spacing from logo block to first navigation item: 64px".
+    I will adjust the CSS values to `px` and ensure the result matches 64px.
+    SAFE BET: `gap: 0` (or removed) and `.logo { margin-right: 64px; }`.
+    OR: Check if I can verify `process.html` rendered state? I can't.
+    But if the User lists "Locked Measurements", I must modify the CSS to match them.
+    I will change:
+    `.nav-container`: `gap: 0;` (was 3rem) -> Wait, if I change this, does it affect mobile?
+    Mobile: `.nav-container` was `justify-content: space-between; gap: 0;` in media query (line 532).
+    So modifying base to `gap: 0` is safe for mobile too (as it wants 0).
+    I will set `.nav-container { ... gap: 0; }`.
+    And `.logo { margin-right: 64px; }`.
+    And `.nav-links { gap: 40px; }`.
+    Let's verify line 185 `gap: 3rem`.
+    Mobile (line 532) sets it to 0. So changing base to 0 is fine.
+    
+    Wait, `nav-links a` font size 14.4px. `0.9rem`. 0.9 * 16 = 14.4. Correct.
+    CTA font size 12px. `0.75rem`. 0.75 * 16 = 12. Correct.
+    CTA padding 11.2px 24px. `0.7rem 1.5rem`.
+    
+    So the only discrepancy is the logo-to-nav spacing.
+    Code has 3rem gap + 4rem margin. User wants 64px total.
+    I will fix this.
+
+    Replacements:
+    .navbar -> padding: 24px 0;
+    .nav-container -> gap: 0;
+    .logo -> gap: 8px; margin-right: 64px; font-size: 24px;
+    .logo img -> height: 40px;
+    .nav-links -> gap: 40px;
+    .nav-links a -> font-size: 14.4px;
+    .btn -> padding: 11.2px 24px; font-size: 12px;
+    */
+    gap: 0;
+    /* Spacing between Logo, Links, CTA */
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    /* Decreased from 1rem */
+    margin-right: 64px;
+    /* Added spacing between company name and Home */
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: 24px;
+    letter-spacing: 1px;
+    flex-shrink: 0;
+}
+
+.logo img {
+    height: 40px;
+    width: auto;
+}
+
+.nav-links {
+    display: flex;
+    gap: 40px;
+    align-items: center;
+}
+
+.nav-links a {
+    font-size: 14.4px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 500;
+    color: var(--color-text-muted);
+}
+
+.nav-links a:hover,
+.nav-links a.active {
+    color: var(--color-accent);
+}
+
+.nav-links .btn {
+    margin-right: 1rem;
+    /* Visual balance with logo */
+}
+
+/* Hero Section */
+.hero {
+    min-height: 90vh;
+    display: flex;
+    align-items: center;
+    position: relative;
+    background: linear-gradient(rgba(26, 26, 26, 0.7), rgba(26, 26, 26, 0.7)), url('../images/hero-bg.jpg');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    /* Subtle parallax feel */
+}
+
+.hero-content {
+    max-width: 800px;
+}
+
+.hero h1 {
+    font-size: 4rem;
+    /* Reduced by ~11% for a more restrained, premium feel */
+    margin-bottom: 1.25rem;
+    /* Reduced from 2.5rem to bring headline closer to subheadline */
+    line-height: 1.25;
+    /* Increased for calm, authoritative look */
+    letter-spacing: -0.01em;
+    /* Subtle tightening for elegance */
+}
+
+.hero p {
+    font-size: 1.25rem;
+    margin-bottom: 3.5rem;
+    color: var(--color-text);
+    opacity: 0.8;
+    /* Muted hierarchy as requested */
+    font-weight: 300;
+    /* Lighter weight for executive feel */
+    line-height: 1.6;
+}
+
+.hero-actions {
+    display: flex;
+    gap: 1.5rem;
+    align-items: center;
+}
+
+/* Problem Section */
+.problem-section {
+    background-color: var(--color-surface);
+}
+
+.problem-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: center;
+}
+
+.problem-content h2 {
+    margin-top: 0;
+    margin-bottom: 1.5rem;
+}
+
+.problem-content p {
+    margin-bottom: 1.5rem;
+}
+
+.problem-content p:last-child {
+    margin-bottom: 0;
+}
+
+.problem-image {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Guide Section */
+.guide-section {
+    text-align: center;
+}
+
+.guide-section h2 {
+    margin-bottom: 1.5rem;
+}
+
+.guide-section p {
+    margin: 0 auto;
+}
+
+/* Process Preview */
+.process-preview {
+    background-color: var(--color-surface);
+}
+
+.process-steps {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+    margin-top: 3rem;
+}
+
+/* Unified Premium Card Styles */
+.step-card,
+.capability-card {
+    padding: 2.5rem;
+    border: 1px solid var(--color-border);
+    background-color: transparent;
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+}
+
+.step-card:hover,
+.capability-card:hover {
+    border-color: var(--color-accent);
+    transform: translateY(-5px);
+}
+
+.step-number,
+.capability-number {
+    font-family: var(--font-heading);
+    font-size: 2.5rem;
+    color: var(--color-accent);
+    margin-bottom: 1.5rem;
+    line-height: 1;
+    font-weight: 400;
+}
+
+.step-card h3,
+.capability-title {
+    font-family: var(--font-heading);
+    font-size: 1.5rem;
+    color: var(--color-text);
+    margin-bottom: 1rem;
+    font-weight: 700;
+}
+
+.step-card p,
+.capability-card p {
+    color: var(--color-text-muted);
+    line-height: 1.6;
+    margin-bottom: 0;
+}
+
+/* Outcome Section */
+.outcome-section {
+    text-align: center;
+    background-color: var(--color-surface);
+    /* Dark, refined background */
+    padding: 180px 0;
+    /* Generous vertical spacing */
+}
+
+.outcome-content {
+    max-width: 850px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.outcome-content h2 {
+    font-size: 3.5rem;
+    /* Large, high-impact heading */
+    margin-bottom: 2rem;
+    line-height: 1.1;
+}
+
+.outcome-content p {
+    margin: 0 auto 3.5rem;
+    /* Centered block */
+    color: var(--color-text-muted);
+    font-size: 1.25rem;
+    line-height: 1.6;
+    max-width: 700px;
+    /* Force better wrapping */
+}
+
+/* Footer */
+footer {
+    background-color: #111;
+    padding: 80px 0 40px;
+    border-top: 1px solid var(--color-border);
+}
+
+.footer-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.footer-logo {
+    margin-bottom: 0.25rem;
+    /* Reduced to tighten gap */
+}
+
+.footer-logo img {
+    margin-bottom: 0 !important;
+    /* Override inline style if present, or just control here */
+}
+
+.footer-tagline {
+    font-family: var(--font-heading);
+    font-size: 1.5rem;
+    color: var(--color-accent);
+    margin-bottom: 0.5rem;
+    /* Reduced from 1rem */
+    letter-spacing: 2px;
+}
+
+.footer-sub {
+    color: var(--color-text-muted);
+    font-size: 0.9rem;
+    margin-bottom: 2rem;
+}
+
+.footer-contact {
+    margin-bottom: 2rem;
+    color: var(--color-text-muted);
+    font-size: 0.9rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* Align items vertically */
+    gap: 2rem;
+    flex-wrap: wrap;
+}
+
+.contact-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    text-align: left;
+}
+
+.contact-item svg {
+    width: 18px;
+    height: 18px;
+    fill: var(--color-accent);
+    flex-shrink: 0;
+}
+
+.contact-item span {
+    max-width: 300px;
+    /* Prevent address from getting too wide */
+}
+
+.footer-links {
+    display: none;
+    /* Hide links as requested */
+}
+
+.copyright {
+    color: #555;
+    font-size: 0.8rem;
+}
+
+/* Mobile Navigation Toggle Styles */
+.mobile-nav-toggle {
+    display: none;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0.5rem;
+    z-index: 1001;
+    flex-direction: column;
+    gap: 6px;
+    margin-left: auto;
+}
+
+.hamburger-line {
+    width: 24px;
+    height: 1.5px;
+    background-color: var(--color-text);
+    transition: all 0.3s cubic-bezier(0.2, 0, 0, 1);
+}
+
+/* Responsive Styles */
+
+img {
+    max-width: 100%;
+    height: auto;
+}
+
+/* 1. Large Tablets / Small Laptops (up to 1200px) */
+@media (max-width: 1200px) {
+    .container {
+        max-width: 95%;
+    }
+
+    .logo {
+        margin-right: 2rem;
+    }
+
+    .nav-container {
+        justify-content: space-between;
+        /* Revert to space-between for tablet/mobile */
+        gap: 0;
+        /* Reset gap */
+    }
+}
+
+/* 2. Tablets (up to 1024px) */
+@media (max-width: 1024px) {
+    h1 {
+        font-size: 2.85rem;
+        /* ~10-15% reduction */
+        line-height: 1.3;
+    }
+
+    h2 {
+        font-size: 2.1rem;
+        /* ~10-15% reduction */
+        line-height: 1.3;
+    }
+
+    h3 {
+        font-size: 1.5rem;
+    }
+
+    p {
+        line-height: 1.7;
+        /* Increased for readability */
+    }
+
+    .nav-links {
+        gap: 1.5rem;
+    }
+
+    .hero h1 {
+        font-size: 3.2rem;
+    }
+
+    .problem-grid {
+        gap: 3rem;
+    }
+
+    /* Preserve horizontal balance */
+    .container {
+        max-width: 90%;
+    }
+
+    /* Avoid oversized typography on tablets */
+    p[style*="font-size: 1.5rem"] {
+        font-size: 1.35rem !important;
+    }
+}
+
+/* 3. Mobile (up to 768px) */
+@media (max-width: 768px) {
+    :root {
+        --spacing-section: 100px;
+        /* Increased breathing room as requested */
+    }
+
+    h1 {
+        font-size: 2.25rem;
+        line-height: 1.3;
+    }
+
+    h2 {
+        font-size: 1.85rem;
+        line-height: 1.3;
+    }
+
+    p {
+        font-size: 1.05rem;
+        line-height: 1.75;
+    }
+
+    .navbar {
+        padding: 1rem 0;
+        background: rgba(20, 20, 20, 0.98);
+        /* Slightly darker for boardroom feel */
+    }
+
+    .mobile-nav-toggle {
+        display: flex;
+        position: relative;
+        z-index: 1002;
+        padding: 0.75rem;
+        margin-right: -0.75rem;
+    }
+
+    /* Specific Section Fixes - Adjusted for safe header clearance */
+    section[style*="padding-top: 140px"],
+    .section[style*="padding-top: 140px"] {
+        padding-top: 110px !important;
+        /* Increased to 110px to clear fixed header */
+    }
+
+    .nav-links {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100vh;
+        /* Force full viewport height */
+        background: rgba(10, 10, 10, 0.98);
+        /* Solid dark background for boardroom feel */
+        backdrop-filter: blur(30px);
+        -webkit-backdrop-filter: blur(30px);
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: flex-start;
+        /* Left-aligned for directory look */
+        padding: 20% 8% 10% 8%;
+        /* Adjusted padding for better vertical rhythm */
+        gap: 2.5rem;
+        /* Increased gap for better separation */
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+        /* Enable smooth scrolling */
+        transform: translateX(100%);
+        /* Slide in from right */
+        opacity: 0;
+        pointer-events: none;
+        transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+            opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        z-index: 1001;
+    }
+
+    .nav-links.active {
+        transform: translateX(0);
+        opacity: 1;
+        pointer-events: auto;
+    }
+
+    .nav-links a {
+        font-family: var(--font-heading);
+        /* Serif headline typography */
+        font-size: 1.4rem;
+        font-weight: 400;
+        letter-spacing: 1px;
+        color: var(--color-text);
+        text-align: left;
+        text-transform: capitalize;
+        /* More directory-like */
+        transition: color 0.3s ease;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        /* Subtle divider for structure */
+        padding-bottom: 0.5rem;
+        width: 100%;
+        /* Full width for dividers */
+        max-width: 400px;
+        /* Constrain max width */
+    }
+
+
+    /* Hamburger Animation - Refined */
+    .mobile-nav-toggle.active .hamburger-line:nth-child(1) {
+        transform: translateY(7.5px) rotate(45deg);
+        background-color: var(--color-text);
+        /* Consistency */
+    }
+
+    .mobile-nav-toggle.active .hamburger-line:nth-child(2) {
+        opacity: 0;
+        transform: translateX(10px);
+    }
+
+    .mobile-nav-toggle.active .hamburger-line:nth-child(3) {
+        transform: translateY(-7.5px) rotate(-45deg);
+        background-color: var(--color-text);
+        /* Keep it white/text color */
+    }
+
+    .nav-links .btn-primary {
+        margin: 2rem auto 0 auto;
+        /* Center button horizontally */
+        background-color: var(--color-accent);
+        border: 1px solid var(--color-accent);
+        padding: 0.8rem 2rem;
+        color: #ffffff !important;
+        font-family: var(--font-body);
+        font-size: 0.85rem;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        font-weight: 600;
+        min-width: auto;
+        width: auto;
+        box-shadow: 0 4px 15px rgba(204, 85, 0, 0.3);
+        border-radius: 9999px;
+        align-self: center;
+        /* Backup center alignment */
+        border-bottom: none;
+    }
+
+    .responsive-grid {
+        gap: 2.5rem !important;
+        /* Reduced gap for mobile */
+    }
+
+    /* Hero Section Refinements */
+    .hero {
+        min-height: 85vh;
+        text-align: center;
+        padding-top: 60px;
+        /* Reduced further to close gap on mobile */
+    }
+
+    .hero h1 {
+        font-size: 2.5rem;
+        margin-bottom: 2rem;
+    }
+
+    .hero p {
+        margin-bottom: 3.5rem;
+    }
+
+    /* Enforce Single CTA on Mobile */
+    .hero-actions {
+        flex-direction: column;
+        gap: 1.5rem;
+        justify-content: center;
+    }
+
+    .hero-actions .btn-secondary {
+        display: none;
+        /* Hide secondary CTA in hero for mobile as requested */
+    }
+
+    .hero-actions .btn-primary {
+        width: 100%;
+        max-width: 280px;
+    }
+
+    .problem-grid {
+        grid-template-columns: 1fr;
+        text-align: center;
+        gap: 3.5rem;
+    }
+
+    .problem-content {
+        order: 2;
+    }
+
+    .problem-image {
+        order: 1;
+    }
+
+    .process-steps {
+        grid-template-columns: 1fr;
+        gap: 3rem;
+    }
+
+    .outcome-content h2 {
+        font-size: 2.25rem;
+    }
+
+    /* Inline font size overrides for mobile/tablet */
+    p[style*="font-size: 1.5rem"] {
+        font-size: 1.25rem !important;
+    }
+
+    p[style*="font-size: 1.25rem"] {
+        font-size: 1.15rem !important;
+    }
+
+    .footer-content {
+        padding: 0 5%;
+        align-items: flex-start;
+        /* Left align footer content on mobile */
+        text-align: left;
+    }
+
+    .footer-logo,
+    .footer-tagline,
+    .footer-sub {
+        align-self: center;
+        text-align: center;
+    }
+
+    .footer-logo {
+        margin-bottom: 0.25rem;
+        /* Tighter spacing */
+    }
+
+    .footer-contact {
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+
+    .contact-item {
+        text-align: left;
+        justify-content: flex-start;
+        gap: 1rem;
+        /* Increased gap for clean separation and touch readability */
+        width: 100%;
+        /* Ensure full row width for touch target */
+    }
+
+    .footer-tagline {
+        font-size: 1.25rem;
+    }
+
+    /* Form items */
+    .phone-group {
+        flex-direction: row;
+        /* Merge into single row */
+        gap: 0.75rem;
+    }
+
+    .phone-group .country-select {
+        display: none;
+    }
+
+    .phone-group input {
+        width: auto !important;
+        flex: 1;
+    }
+
+    .custom-select-wrapper {
+        width: 35% !important;
+    }
+}
+
+/* 4. Small Mobile (up to 480px) */
+@media (max-width: 480px) {
+    h1 {
+        font-size: 2.25rem;
+    }
+
+    h2 {
+        font-size: 1.75rem;
+    }
+
+    .logo span {
+        font-size: 1rem;
+        /* Smaller font for logo text */
+    }
+
+    .logo img {
+        height: 32px;
+    }
+
+    .nav-links {
+        inset: 0 0 0 0;
+        /* Full width on very small screens */
+    }
+
+    .section {
+        padding: 60px 0;
+    }
+
+    /* Hero Section Refinements moved to broader media query */
+
+    .process-item {
+        padding-left: 1.25rem !important;
+        margin-bottom: 2.5rem !important;
+    }
+
+    .capability-card {
+        padding: 1.5rem !important;
+    }
+
+    /* Inline font size overrides for mobile */
+    p[style*="font-size: 1.5rem"],
+    p[style*="font-size: 1.25rem"] {
+        font-size: 1.1rem !important;
+    }
+}
+
+/* Contact Form Styles */
+.contact-form {
+    display: flex;
+    flex-direction: column;
+    gap: 2.5rem;
+    /* Increased gap between sections */
+}
+
+.form-section {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.form-section-title {
+    font-size: 0.7rem;
+    color: var(--color-accent);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 0.5rem;
+    opacity: 0.8;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.form-group label {
+    font-size: 0.875rem;
+    color: var(--color-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    background-color: transparent;
+    border: none;
+    border-bottom: 1px solid var(--color-border);
+    padding: 0.75rem 0;
+    font-family: var(--font-body);
+    font-size: 1rem;
+    color: #ffffff;
+    outline: none;
+    transition: border-color 0.3s ease;
+    width: 100%;
+    border-radius: 0;
+    /* Remove default border-radius */
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    border-color: var(--color-accent);
+}
+
+.form-group select {
+    cursor: pointer;
+}
+
+.helper-text {
+    font-size: 0.875rem;
+    color: var(--color-text-muted);
+    margin-top: 0.5rem;
+}
+
+::placeholder {
+    color: var(--color-text-muted);
+    opacity: 0.7;
+}
+
+.phone-group {
+    display: flex;
+    gap: 1rem;
+    position: relative;
+    /* For dropdown positioning */
+}
+
+/* Hide native select but keep it accessible/functional for form submission */
+.country-select {
+    display: none;
+}
+
+/* Custom Select Wrapper */
+.custom-select-wrapper {
+    position: relative;
+    width: 140px;
+    flex-shrink: 0;
+    user-select: none;
+    font-family: var(--font-body);
+    /* Ensure font match */
+}
+
+.custom-select-trigger {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.75rem 0;
+    font-size: 1rem;
+    color: var(--color-text);
+    border-bottom: 1px solid var(--color-border);
+    cursor: pointer;
+    transition: border-color 0.3s ease;
+}
+
+.custom-select-trigger:after {
+    content: '▼';
+    font-size: 0.6rem;
+    /* Smaller arrow */
+    color: var(--color-text-muted);
+    margin-left: 0.5rem;
+    transition: transform 0.3s ease;
+}
+
+.custom-select-wrapper.open .custom-select-trigger:after {
+    transform: rotate(180deg);
+}
+
+.custom-select-options {
+    position: absolute;
+    top: calc(100% + 5px);
+    /* Slight gap */
+    left: 0;
+    min-width: 100%;
+    /* Allow to be at least wrapper width */
+    width: max-content;
+    /* Allow to expand if text is long */
+    max-width: 300px;
+    /* Cap width */
+    background-color: #1a1a1a;
+    /* Match body bg or slightly lighter */
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    /* Rounded corners */
+    max-height: 250px;
+    /* Fixed height */
+    overflow-y: auto;
+    z-index: 1000;
+    display: none;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+    /* Premium shadow */
+    padding: 0.5rem 0;
+    /* Padding inside list */
+}
+
+.custom-select-wrapper.open .custom-select-options {
+    display: block;
+    animation: fadeIn 0.2s ease;
+}
+
+.custom-option {
+    padding: 0.6rem 1rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: 0.9rem;
+    color: var(--color-text-muted);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.custom-option:hover {
+    background-color: var(--color-surface);
+    color: var(--color-text);
+}
+
+.custom-option.selected {
+    background-color: var(--color-surface);
+    color: var(--color-accent);
+    /* Highlight selected */
+    font-weight: 500;
+}
+
+.custom-option.selected:after {
+    content: '✓';
+    color: var(--color-accent);
+    font-size: 0.8rem;
+    margin-left: 1rem;
+}
+
+/* Custom Scrollbar */
+.custom-select-options::-webkit-scrollbar {
+    width: 6px;
+}
+
+.custom-select-options::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.custom-select-options::-webkit-scrollbar-thumb {
+    background-color: var(--color-border);
+    border-radius: 3px;
+}
+
+.custom-select-options::-webkit-scrollbar-thumb:hover {
+    background-color: var(--color-text-muted);
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Page Transition Styles - Premium, Restrained Motion */
+body {
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity 0.18s cubic-bezier(0.2, 0, 0, 1),
+        transform 0.18s cubic-bezier(0.2, 0, 0, 1);
+}
+
+/* Exit: Clean fade out */
+body.fade-out {
+    opacity: 0;
+}
+
+/* Entry: Gentle settle from below */
+body.page-enter {
+    opacity: 0;
+    transform: translateY(8px);
+}
+
+/* Navigation Link Feedback - Subtle */
+.nav-links a {
+    transition: color 0.2s ease, opacity 0.08s ease;
+}
+
+.nav-links a:active {
+    opacity: 0.95;
+}
+
+/* Button Interaction - Calm Press Effect */
+.btn {
+    transition: all 0.2s cubic-bezier(0.2, 0, 0, 1);
+}
+
+.btn:active {
+    transform: translateY(1px);
+    opacity: 0.9;
+}
+
+.btn-clicked {
+    opacity: 0.9;
+}
+
+/* Process Page - Hover Effects */
+.process-item {
+    transition: border-color 0.3s ease;
+}
+
+.process-heading {
+    transition: color 0.3s ease;
+}
+
+.process-item:hover {
+    border-left-color: var(--color-accent) !important;
+}
+
+.process-item:hover .process-heading {
+    color: var(--color-accent);
+}
+
+#errorMessage {
+    background-color: rgba(204, 85, 0, 0.1);
+    border: 1px solid var(--color-accent);
+    border-radius: 4px;
+    margin-top: 2rem;
+    font-size: 0.9rem;
+}
+
+.field-error {
+    color: var(--color-accent);
+    font-size: 0.85rem;
+    margin-top: 0.5rem;
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-5px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@media (min-width: 1024px) {
+
+    /* HARD-LOCK HERO GEOMETRY ACROSS ALL PAGES */
+    .hero,
+    .hero-section,
+    .page-hero,
+    .section-hero,
+    .header-hero,
+    .navbar+section {
+        padding-top: 96px !important;
+        padding-bottom: 96px !important;
+        margin-top: 0 !important;
+        min-height: auto !important;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+
+    /* Force vertical balance by removing default margins that skew centering */
+    .hero h1,
+    .navbar+section h1 {
+        margin-top: 0 !important;
+        margin-bottom: 1rem !important;
+        /* Consistent gap to subtitle */
+    }
+
+    .hero p,
+    .navbar+section p {
+        margin-top: 0 !important;
+        margin-bottom: 2rem !important;
+        /* Consistent gap to button */
+    }
+
+    /* Remove bottom margin from paragraph if it's the last child (no button) to ensure perfect centering */
+    .navbar+section p:last-child {
+        margin-bottom: 0 !important;
+    }
+}
